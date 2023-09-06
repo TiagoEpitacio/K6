@@ -29,4 +29,8 @@ export default function(){
     group('Adcionar produto', () =>{
         produtos.adicionar(login.getToken())
     })
+
+    group('Buscar produtos por id', () =>{
+        produtos.buscar(login.getToken())
+    })
 }

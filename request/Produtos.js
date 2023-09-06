@@ -6,6 +6,7 @@ import http from "k6/http"
 
 export default class Produtos{
     constructor(){
+        this.id = "";
     }
 
 
@@ -25,7 +26,6 @@ export default class Produtos{
         });
     }
 
-
     adicionar(token){
         let payload = JSON.stringify({     
             nome: 'Carro' + Math.floor(Math.random() * 10000),
@@ -43,11 +43,29 @@ export default class Produtos{
             }
         }
 
-        const resp = http.post('https://serverest.dev/produtos',payload , params)
+        const resp = http.post('https://serverest.dev/produtos', payload , params)
+        this.id = resp.json('_id');
+
 
         check(resp,{
             'Status é 201': () => resp.status === 201
         });
     }
-    
+
+    buscar(token){
+        let params = {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json',
+              'monitor': false,
+              'Authorization': token
+            }
+        }
+
+        const resp = http.get('https://serverest.dev/produtos/' + this.id , params)
+
+        check(resp,{
+            'Status é 200': () => resp.status === 200
+        });
+    }
 }
